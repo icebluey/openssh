@@ -26,7 +26,11 @@ service sshd stop >/dev/null 2>&1 || :
 chkconfig --del sshd >/dev/null 2>&1 || : 
 systemctl disable sshd.service >/dev/null 2>&1 || : 
 systemctl stop sshd.service >/dev/null 2>&1 || : 
-rpm -evh --nodeps openssh openssh-clients openssh-server
+
+rpm -evh --nodeps openssh-server 2>/dev/null || : 
+rpm -evh --nodeps openssh-clients 2>/dev/null || : 
+rpm -evh --nodeps openssh 2>/dev/null || : 
+
 echo
 rm -f /etc/pam.d/sshd
 rm -f /etc/pam.d/sshd.*
