@@ -1,6 +1,6 @@
 %global dist .el7
 
-%global ver 8.8p1
+%global ver 8.9p1
 %global rel 1%{?dist}
 
 # Do we want SELinux & Audit
