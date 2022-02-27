@@ -420,11 +420,11 @@ getent passwd sshd >/dev/null || \
 /bin/rm -f /etc/ssh/ssh_host_ecdsa_key.pub
 /bin/rm -f /etc/ssh/ssh_host_ed25519_key
 /bin/rm -f /etc/ssh/ssh_host_ed25519_key.pub
-/bin/ssh-keygen -q -t rsa -b 5120 -E sha512 -f /etc/ssh/ssh_host_rsa_key -N "" -C ""
-/bin/ssh-keygen -q -t dsa -E sha512 -f /etc/ssh/ssh_host_dsa_key -N "" -C ""
-/bin/ssh-keygen -q -t ecdsa -b 521 -E sha512 -f /etc/ssh/ssh_host_ecdsa_key -N "" -C ""
-/bin/ssh-keygen -q -t ed25519 -E sha512 -f /etc/ssh/ssh_host_ed25519_key -N "" -C ""
-/bin/systemctl daemon-reload
+/bin/ssh-keygen -q -a 200 -t rsa -b 5120 -E sha512 -f /etc/ssh/ssh_host_rsa_key -N "" -C ""
+/bin/ssh-keygen -q -a 200 -t dsa -E sha512 -f /etc/ssh/ssh_host_dsa_key -N "" -C ""
+/bin/ssh-keygen -q -a 200 -t ecdsa -b 521 -E sha512 -f /etc/ssh/ssh_host_ecdsa_key -N "" -C ""
+/bin/ssh-keygen -q -a 200 -t ed25519 -E sha512 -f /etc/ssh/ssh_host_ed25519_key -N "" -C ""
+/bin/systemctl daemon-reload >/dev/null 2>&1 || : 
 /bin/systemctl enable sshd.service >/dev/null 2>&1 || : 
 
 %postun server
