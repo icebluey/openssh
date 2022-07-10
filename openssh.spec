@@ -348,6 +348,8 @@ cp -af /usr/lib64/libcrypto.so $RPM_BUILD_ROOT%{_libdir}/openssh/private/
 cp -af /usr/lib64/libssl.so.1.1 $RPM_BUILD_ROOT%{_libdir}/openssh/private/
 cp -af /usr/lib64/libssl.so $RPM_BUILD_ROOT%{_libdir}/openssh/private/
 cp -af /usr/lib64/libfido2.so* $RPM_BUILD_ROOT%{_libdir}/openssh/private/
+cp -af /usr/lib64/libz.so* $RPM_BUILD_ROOT%{_libdir}/openssh/private/
+cp -af /usr/lib64/libedit.so* $RPM_BUILD_ROOT%{_libdir}/openssh/private/
 
 echo '[Unit]
 Description=OpenSSH server daemon
@@ -458,6 +460,8 @@ fi
 %attr(0644,root,root) %{_sysconfdir}/ssh/ssh-hardening-options.txt
 %{_libdir}/openssh/private/libcrypto.so*
 %{_libdir}/openssh/private/libssl.so*
+%{_libdir}/openssh/private/libz.so*
+%{_libdir}/openssh/private/libedit.so*
 %if ! %{rescue}
 %attr(0755,root,root) %{_bindir}/ssh-keygen
 %attr(0644,root,root) %{_mandir}/man1/ssh-keygen.1*

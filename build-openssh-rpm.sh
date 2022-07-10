@@ -12,7 +12,15 @@ cd "$(dirname "$0")"
 
 set -e
 
+if ! grep -q -i '^1:.*docker' /proc/1/cgroup; then
+    echo
+    echo ' Not in a container!'
+    echo
+    exit 1
+fi
+
 bash ./.dl-openssh.sh
+bash build-libcbor-ssl111-fido2.sh
 _tmp_dir="$(mktemp -d)"
 cp -pf openssh.spec "${_tmp_dir}"/
 cp -pf openssh-*.tar* "${_tmp_dir}"/
@@ -33,8 +41,10 @@ cat ChangeLog >> contrib/redhat/openssh.spec
 rm -f ../openssh.spec
 sed 's@%global no_x11_askpass 0@%global no_x11_askpass 1@g' -i contrib/redhat/openssh.spec
 sed 's@%global no_gnome_askpass 0@%global no_gnome_askpass 1@g' -i contrib/redhat/openssh.spec
-sed 's/%configure \\/%configure \\\n\t--with-ssl-dir=\/usr\/local\/openssl-1.1.1 \\/g' -i contrib/redhat/openssh.spec
 sed 's/BuildRequires: openssl-devel/#BuildRequires: openssl-devel/g' -i contrib/redhat/openssh.spec
+
+#sed 's/%configure \\/%configure \\\n\t--with-ssl-dir=\/usr\/local\/openssl-1.1.1 \\/g' -i contrib/redhat/openssh.spec
+
 cp -fr contrib/redhat/openssh.spec ../
 cd ..
 

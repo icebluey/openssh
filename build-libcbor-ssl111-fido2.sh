@@ -30,6 +30,67 @@ fi
 _tmp_dir="$(mktemp -d)"
 cd "${_tmp_dir}"
 
+
+_install_zlib () {
+    set -e
+    _tmp_dir="$(mktemp -d)"
+    cd "${_tmp_dir}"
+    _zlib_ver="$(wget -qO- 'https://www.zlib.net/' | grep -i 'HREF="zlib-[0-9].*\.tar\.' | sed 's|"|\n|g' | grep '^zlib-' | grep -ivE 'alpha|beta|rc' | sed -e 's|zlib-||g' -e 's|\.tar.*||g' | sort -V | uniq | tail -n 1)"
+    wget -q -c -t 9 -T 9 "https://zlib.net/zlib-${_zlib_ver}.tar.xz"
+    sleep 1
+    tar -xf "zlib-${_zlib_ver}.tar.xz"
+    sleep 1
+    rm -f zlib-*.tar*
+    cd "zlib-${_zlib_ver}"
+    ./configure --prefix=/usr --libdir=/usr/lib64 --includedir=/usr/include --64
+    sleep 1
+    make all
+    rm -f /usr/lib64/libz.*
+    sleep 1
+    make install
+    sleep 1
+    cd /tmp
+    rm -fr "${_tmp_dir}"
+    /sbin/ldconfig >/dev/null 2>&1
+}
+_install_zlib
+
+
+_install_libedit () {
+    set -e
+    _tmp_dir="$(mktemp -d)"
+    cd "${_tmp_dir}"
+    _libedit_ver="$(wget -qO- 'https://www.thrysoee.dk/editline/' | grep libedit-[1-9].*\.tar | sed 's|"|\n|g' | grep '^libedit-[1-9]' | sed -e 's|\.tar.*||g' -e 's|libedit-||g' | sort -V | uniq | tail -n 1)"
+    wget -q -c -t 9 -T 9 "https://www.thrysoee.dk/editline/libedit-${_libedit_ver}.tar.gz"
+    sleep 1
+    tar -xf libedit-${_libedit_ver}.tar.*
+    sleep 1
+    rm -f libedit-*.tar*
+    cd libedit-*
+    sed -i "s/lncurses/ltinfo/" configure
+    sleep 1
+    ./configure \
+    --build=x86_64-linux-gnu \
+    --host=x86_64-linux-gnu \
+    --prefix=/usr \
+    --libdir=/usr/lib64 \
+    --includedir=/usr/include \
+    --sysconfdir=/etc \
+    --enable-shared --enable-static \
+    --enable-widec
+    sleep 1
+    make all
+    rm -f /usr/lib64/libedit.*
+    sleep 1
+    make install
+    sleep 1
+    cd /tmp
+    rm -fr "${_tmp_dir}"
+    /sbin/ldconfig >/dev/null 2>&1
+}
+_install_libedit
+
+
 _install_libcbor () {
     set -e
     _tmp_dir="$(mktemp -d)"
@@ -60,10 +121,9 @@ _install_libcbor () {
     rm -fr /usr/include/cbor
     /usr/bin/cmake --install "build"
     sleep 1
-    #strip /usr/lib64/libcbor.so.*.*.*
     cd /tmp
     rm -fr "${_tmp_dir}"
-    /sbin/ldconfig >/dev/null 2>&1    
+    /sbin/ldconfig >/dev/null 2>&1
 }
 _install_libcbor
 
@@ -101,8 +161,6 @@ _install_ssl111 () {
     sleep 1
     make install_sw
     sleep 1
-    #strip /usr/lib64/libcrypto.so.1.1
-    #strip /usr/lib64/libssl.so.1.1
     cd ..
     rm -fr openssl*
     cd /tmp
@@ -140,7 +198,6 @@ _install_fido2 () {
     sed '/OLD_RPATH "/s|:"|"|g' -i build/src/cmake_install.cmake
     /usr/bin/cmake --install "build"
     sleep 1
-    #strip /usr/lib64/libfido2.so.*.*
     cd /tmp
     rm -fr "${_tmp_dir}"
     /sbin/ldconfig >/dev/null 2>&1
