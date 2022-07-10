@@ -4,11 +4,6 @@ TZ='UTC'; export TZ
 
 umask 022
 
-CC=gcc
-export CC
-CXX=g++
-export CXX
-
 CFLAGS='-O2 -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -m64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection'
 export CFLAGS
 CXXFLAGS='-O2 -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -m64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection'
@@ -30,7 +25,6 @@ fi
 _tmp_dir="$(mktemp -d)"
 cd "${_tmp_dir}"
 
-
 _install_zlib () {
     set -e
     _tmp_dir="$(mktemp -d)"
@@ -42,7 +36,7 @@ _install_zlib () {
     sleep 1
     rm -f zlib-*.tar*
     cd "zlib-${_zlib_ver}"
-    ./configure --prefix=/usr --libdir=/usr/lib64 --includedir=/usr/include --64
+    ./configure --prefix=/usr --libdir=/usr/lib64 --includedir=/usr/include --sysconfdir=/etc --64
     sleep 1
     make all
     rm -f /usr/lib64/libz.*
@@ -55,6 +49,10 @@ _install_zlib () {
 }
 _install_zlib
 
+CC=gcc
+export CC
+CXX=g++
+export CXX
 
 _install_libedit () {
     set -e
