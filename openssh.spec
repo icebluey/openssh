@@ -233,6 +233,8 @@ environment.
 CFLAGS="$RPM_OPT_FLAGS -Os"; export CFLAGS
 %endif
 
+LDFLAGS='-Wl,-z,relro -Wl,--as-needed -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -Wl,-rpath,/usr/lib64/openssh/private' ; export LDFLAGS
+
 sed "/^#UsePAM no/i# WARNING: 'UsePAM no' is not supported in Red Hat Enterprise Linux and may cause several\n# problems." -i sshd_config
 sed 's|^#UsePAM .*|UsePAM yes|g' -i sshd_config
 sed '/^#PrintMotd .*/s|^#PrintMotd .*|\n# It is recommended to use pam_motd in /etc/pam.d/sshd instead of PrintMotd,\n# as it is more configurable and versatile than the built-in version.\nPrintMotd no\n|g' -i sshd_config
