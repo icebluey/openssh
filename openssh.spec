@@ -337,6 +337,16 @@ printf '\x23\x20\x43\x6F\x6E\x66\x69\x67\x75\x72\x61\x74\x69\x6F\x6E\x20\x66\x69
 chmod 640 $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/sshd
 touch -r $RPM_BUILD_ROOT%{_sbindir}/sshd $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/sshd
 rm -fr $RPM_BUILD_ROOT%{_unitdir}/sshd.service
+
+install -m 0755 -d $RPM_BUILD_ROOT%{_libdir}/openssh/private
+sleep 1
+cp -af /usr/lib64/libcbor.so* $RPM_BUILD_ROOT%{_libdir}/openssh/private/
+cp -af /usr/lib64/libcrypto.so.1.1 $RPM_BUILD_ROOT%{_libdir}/openssh/private/
+cp -af /usr/lib64/libcrypto.so $RPM_BUILD_ROOT%{_libdir}/openssh/private/
+cp -af /usr/lib64/libssl.so.1.1 $RPM_BUILD_ROOT%{_libdir}/openssh/private/
+cp -af /usr/lib64/libssl.so $RPM_BUILD_ROOT%{_libdir}/openssh/private/
+cp -af /usr/lib64/libfido2.so* $RPM_BUILD_ROOT%{_libdir}/openssh/private/
+
 echo '[Unit]
 Description=OpenSSH server daemon
 Documentation=man:sshd(8) man:sshd_config(5)
@@ -444,6 +454,8 @@ fi
 %attr(0755,root,root) %dir %{_sysconfdir}/ssh
 %attr(0600,root,root) %config %{_sysconfdir}/ssh/moduli
 %attr(0644,root,root) %{_sysconfdir}/ssh/ssh-hardening-options.txt
+%{_libdir}/openssh/private/libcrypto.so*
+%{_libdir}/openssh/private/libssl.so*
 %if ! %{rescue}
 %attr(0755,root,root) %{_bindir}/ssh-keygen
 %attr(0644,root,root) %{_mandir}/man1/ssh-keygen.1*
@@ -476,6 +488,8 @@ fi
 %attr(0755,root,root) %{_bindir}/sftp
 %attr(0755,root,root) %{_libexecdir}/openssh/ssh-pkcs11-helper
 %attr(0755,root,root) %{_libexecdir}/openssh/ssh-sk-helper
+%{_libdir}/openssh/private/libcbor.so*
+%{_libdir}/openssh/private/libfido2.so*
 %attr(0644,root,root) %{_mandir}/man8/ssh-pkcs11-helper.8*
 %attr(0644,root,root) %{_mandir}/man8/ssh-sk-helper.8*
 %attr(0644,root,root) %{_mandir}/man1/ssh-agent.1*
