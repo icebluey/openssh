@@ -22,6 +22,7 @@ if [[ ${_rc_status} != "0" ]]; then
     echo
 fi
 
+echo
 service sshd stop >/dev/null 2>&1 || : 
 chkconfig --del sshd >/dev/null 2>&1 || : 
 systemctl disable sshd.service >/dev/null 2>&1 || : 
