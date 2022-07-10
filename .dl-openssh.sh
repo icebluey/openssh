@@ -24,6 +24,7 @@ cd "openssh-${_ver}${_port}"
 sleep 1
 git log | grep '^commit' | head -n 1 > .gitversion
 cat .gitversion
+echo
 
 rm -f configure.ac.orig
 rm -f sshd.c.orig
