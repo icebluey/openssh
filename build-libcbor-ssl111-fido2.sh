@@ -127,6 +127,9 @@ _install_libcbor
 
 
 _install_ssl111 () {
+    LDFLAGS=''
+    LDFLAGS='-Wl,-z,relro -Wl,--as-needed -Wl,-z,now -Wl,-rpath,\$$ORIGIN'
+    export LDFLAGS
     set -e
     _tmp_dir="$(mktemp -d)"
     cd "${_tmp_dir}"
@@ -165,14 +168,16 @@ _install_ssl111 () {
     rm -fr "${_tmp_dir}"
     /sbin/ldconfig >/dev/null 2>&1
 }
-LDFLAGS='-Wl,-z,relro -Wl,--as-needed -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -Wl,-rpath,/usr/lib64/openssh/private'
-export LDFLAGS
+#LDFLAGS='-Wl,-z,relro -Wl,--as-needed -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -Wl,-rpath,/usr/lib64/openssh/private'
 _install_ssl111
-LDFLAGS='-Wl,-z,relro -Wl,--as-needed -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld'
-export LDFLAGS
 
+#LDFLAGS='-Wl,-z,relro -Wl,--as-needed -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld'
+#export LDFLAGS
 
 _install_fido2 () {
+    LDFLAGS=''
+    LDFLAGS='-Wl,-z,relro -Wl,--as-needed -Wl,-z,now -Wl,-rpath,\$$ORIGIN'
+    export LDFLAGS
     set -e
     _tmp_dir="$(mktemp -d)"
     cd "${_tmp_dir}"
