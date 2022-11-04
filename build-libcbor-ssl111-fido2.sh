@@ -8,8 +8,10 @@ CFLAGS='-O2 -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-sec
 export CFLAGS
 CXXFLAGS='-O2 -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -m64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection'
 export CXXFLAGS
+
 LDFLAGS='-Wl,-z,relro -Wl,--as-needed -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld'
 export LDFLAGS
+_ORIG_LDFLAGS="$LDFLAGS"
 
 /sbin/ldconfig
 
@@ -128,7 +130,7 @@ _install_libcbor
 
 _install_ssl111 () {
     LDFLAGS=''
-    LDFLAGS='-Wl,-z,relro -Wl,--as-needed -Wl,-z,now -Wl,-rpath,\$$ORIGIN'
+    LDFLAGS="${_ORIG_LDFLAGS}"' -Wl,-rpath,\$$ORIGIN'
     export LDFLAGS
     set -e
     _tmp_dir="$(mktemp -d)"
@@ -158,6 +160,8 @@ _install_ssl111 () {
     rm -f /usr/lib64/pkgconfig/openssl.pc
     rm -f /usr/lib64/pkgconfig/libssl.pc
     rm -f /usr/lib64/pkgconfig/libcrypto.pc
+    rm -f /usr/lib64/libssl.so.1.1
+    rm -f /usr/lib64/libcrypto.so.1.1
     rm -fr /usr/include/openssl
     sleep 1
     make install_sw
@@ -168,15 +172,11 @@ _install_ssl111 () {
     rm -fr "${_tmp_dir}"
     /sbin/ldconfig >/dev/null 2>&1
 }
-#LDFLAGS='-Wl,-z,relro -Wl,--as-needed -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -Wl,-rpath,/usr/lib64/openssh/private'
 _install_ssl111
-
-#LDFLAGS='-Wl,-z,relro -Wl,--as-needed -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld'
-#export LDFLAGS
 
 _install_fido2 () {
     LDFLAGS=''
-    LDFLAGS='-Wl,-z,relro -Wl,--as-needed -Wl,-z,now -Wl,-rpath,\$$ORIGIN'
+    LDFLAGS="${_ORIG_LDFLAGS}"' -Wl,-rpath,\$ORIGIN'
     export LDFLAGS
     set -e
     _tmp_dir="$(mktemp -d)"
@@ -191,14 +191,15 @@ _install_fido2 () {
     PKG_CONFIG_PATH=/usr/lib64/pkgconfig \
     cmake -S . -B build -G 'Unix Makefiles' -DCMAKE_BUILD_TYPE:STRING='Debug' \
     -DCMAKE_INSTALL_SO_NO_EXE=0 -DUSE_PCSC=ON \
-    -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64 \
-    -DCMAKE_BUILD_RPATH='/usr/lib64/openssh/private'
+    -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBDIR=lib64
+
+    #-DCMAKE_BUILD_RPATH='/usr/lib64/openssh/private'
     /usr/bin/cmake --build "build"  --verbose
     rm -f /usr/lib64/libfido2.*
     rm -f /usr/include/fido.h
     rm -fr /usr/include/fido
-    sed '/NEW_RPATH ""/s|NEW_RPATH ""|NEW_RPATH "/usr/lib64/openssh/private"|g' -i build/src/cmake_install.cmake
-    sed '/OLD_RPATH "/s|:"|"|g' -i build/src/cmake_install.cmake
+    #sed '/NEW_RPATH ""/s|NEW_RPATH ""|NEW_RPATH "/usr/lib64/openssh/private"|g' -i build/src/cmake_install.cmake
+    #sed '/OLD_RPATH "/s|:"|"|g' -i build/src/cmake_install.cmake
     /usr/bin/cmake --install "build"
     sleep 1
     cd /tmp
