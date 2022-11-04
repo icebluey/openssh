@@ -39,6 +39,7 @@ rm -fr /usr/libexec/openssh
 rm -fr /etc/systemd/system/sshd.service.d
 rm -fr /etc/sysconfig/sshd
 rm -fr /etc/ssh
+rm -fr /usr/lib64/openssh/private
 
 yum -y install openssh-[1-9]*.rpm openssh-clients-*.rpm
 yum -y install openssh-server-*.rpm
