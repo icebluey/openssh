@@ -4,6 +4,11 @@ TZ='UTC'; export TZ
 
 umask 022
 
+CC=gcc
+export CC
+CXX=g++
+export CXX
+
 CFLAGS='-O2 -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -m64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection'
 export CFLAGS
 CXXFLAGS='-O2 -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -m64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection'
@@ -51,10 +56,6 @@ _install_zlib () {
 }
 _install_zlib
 
-CC=gcc
-export CC
-CXX=g++
-export CXX
 
 _install_libedit () {
     set -e
@@ -89,7 +90,6 @@ _install_libedit () {
     /sbin/ldconfig >/dev/null 2>&1
 }
 _install_libedit
-
 
 _install_libcbor () {
     set -e
@@ -126,7 +126,6 @@ _install_libcbor () {
     /sbin/ldconfig >/dev/null 2>&1
 }
 _install_libcbor
-
 
 _install_ssl111 () {
     LDFLAGS=''
