@@ -30,7 +30,7 @@ cd "${_tmp_dir}"
 
 _openssh_ver="$(ls -1 openssh-*.tar* | sort -V | tail -n 1 | cut -d- -f2 | sed 's|\.tar.*||g')"
 sed "s/%global ver .*/%global ver ${_openssh_ver}/g" -i openssh.spec
-tar -xf "openssh-${_openssh_ver}".tar.gz
+tar -xof "openssh-${_openssh_ver}".tar.gz
 
 cd "openssh-${_openssh_ver}"/
 rm -rf ChangeLog
