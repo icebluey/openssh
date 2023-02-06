@@ -18,8 +18,6 @@ LDFLAGS='-Wl,-z,relro -Wl,--as-needed -Wl,-z,now -specs=/usr/lib/rpm/redhat/redh
 export LDFLAGS
 _ORIG_LDFLAGS="$LDFLAGS"
 
-/sbin/ldconfig
-
 set -e
 
 if ! grep -q -i '^1:.*docker' /proc/1/cgroup; then
@@ -29,8 +27,8 @@ if ! grep -q -i '^1:.*docker' /proc/1/cgroup; then
     exit 1
 fi
 
-_tmp_dir="$(mktemp -d)"
-cd "${_tmp_dir}"
+cd /tmp
+/sbin/ldconfig >/dev/null 2>&1
 
 _install_zlib () {
     set -e
@@ -208,7 +206,6 @@ _install_fido2 () {
 _install_fido2
 
 cd /tmp
-rm -fr "${_tmp_dir}"
 echo
 echo ' done'
 echo
