@@ -350,6 +350,7 @@ cp -af /usr/lib64/libssl.so $RPM_BUILD_ROOT%{_libdir}/openssh/private/
 cp -af /usr/lib64/libfido2.so* $RPM_BUILD_ROOT%{_libdir}/openssh/private/
 cp -af /usr/lib64/libz.so* $RPM_BUILD_ROOT%{_libdir}/openssh/private/
 cp -af /usr/lib64/libedit.so* $RPM_BUILD_ROOT%{_libdir}/openssh/private/
+cp -af /usr/lib64/libpcsclite.so* $RPM_BUILD_ROOT%{_libdir}/openssh/private/
 
 echo '[Unit]
 Description=OpenSSH server daemon
