@@ -38,7 +38,7 @@ _install_zlib () {
     _zlib_ver="$(wget -qO- 'https://www.zlib.net/' | grep -i 'HREF="zlib-[0-9].*\.tar\.' | sed 's|"|\n|g' | grep '^zlib-' | grep -ivE 'alpha|beta|rc' | sed -e 's|zlib-||g' -e 's|\.tar.*||g' | sort -V | uniq | tail -n 1)"
     wget -q -c -t 9 -T 9 "https://zlib.net/zlib-${_zlib_ver}.tar.xz"
     sleep 1
-    tar -xf "zlib-${_zlib_ver}.tar.xz"
+    tar -xof "zlib-${_zlib_ver}.tar.xz"
     sleep 1
     rm -f zlib-*.tar*
     cd "zlib-${_zlib_ver}"
@@ -64,7 +64,7 @@ _install_libedit () {
     _libedit_ver="$(wget -qO- 'https://www.thrysoee.dk/editline/' | grep libedit-[1-9].*\.tar | sed 's|"|\n|g' | grep '^libedit-[1-9]' | sed -e 's|\.tar.*||g' -e 's|libedit-||g' | sort -V | uniq | tail -n 1)"
     wget -q -c -t 9 -T 9 "https://www.thrysoee.dk/editline/libedit-${_libedit_ver}.tar.gz"
     sleep 1
-    tar -xf libedit-${_libedit_ver}.tar.*
+    tar -xof libedit-${_libedit_ver}.tar.*
     sleep 1
     rm -f libedit-*.tar*
     cd libedit-*
@@ -99,7 +99,7 @@ _install_libcbor () {
     _libcbor_ver="$(wget -qO- 'https://github.com/PJK/libcbor/tags' | grep -i 'href="/PJK/libcbor/archive/refs/tags/.*.tar.gz' | sed 's|"|\n|g' | grep '^/PJK/libcbor/archive/refs/tags' | sed -e 's|.*tags/v||g' -e 's|\.tar.*||g' | sort -V | uniq | tail -n 1)"
     wget -q -c -t 9 -T 9 "https://github.com/PJK/libcbor/archive/v${_libcbor_ver}/libcbor-${_libcbor_ver}.tar.gz"
     sleep 1
-    tar -xf "libcbor-${_libcbor_ver}.tar.gz"
+    tar -xof "libcbor-${_libcbor_ver}.tar.gz"
     sleep 1
     rm -f libcbor*.tar*
     cd "libcbor-${_libcbor_ver}"
@@ -139,7 +139,7 @@ _install_ssl111 () {
     _ssl_ver="$(wget -qO- 'https://www.openssl.org/source/' | grep '1.1.1' | sed 's/">/ /g' | sed 's/<\/a>/ /g' | awk '{print $3}' | grep '\.tar.gz' | sed -e 's|openssl-||g' -e 's|\.tar.*||g' | sort -V | tail -n 1)"
     wget -q -c -t 9 -T 9 "https://www.openssl.org/source/openssl-${_ssl_ver}.tar.gz"
     sleep 1
-    tar -xf "openssl-${_ssl_ver}.tar.gz"
+    tar -xof "openssl-${_ssl_ver}.tar.gz"
     sleep 1
     rm -f openssl*.tar.gz
     cd openssl-*
@@ -228,7 +228,7 @@ _install_fido2 () {
     _libfido2_ver="$(wget -qO- 'https://developers.yubico.com/libfido2/Releases/' | grep -i 'a href="libfido2-.*\.tar' | sed 's|"|\n|g' | grep -iv '\.sig' | grep -i '^libfido2' | sed -e 's|libfido2-||g' -e 's|\.tar.*||g' | sort -V | uniq | tail -n 1)"
     wget -q -c -t 9 -T 9 "https://developers.yubico.com/libfido2/Releases/libfido2-${_libfido2_ver}.tar.gz"
     sleep 1
-    tar -xf "libfido2-${_libfido2_ver}.tar.gz"
+    tar -xof "libfido2-${_libfido2_ver}.tar.gz"
     sleep 1
     rm -f libfido*.tar*
     cd "libfido2-${_libfido2_ver}"
