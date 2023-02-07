@@ -496,6 +496,7 @@ fi
 %attr(0755,root,root) %{_libexecdir}/openssh/ssh-pkcs11-helper
 %attr(0755,root,root) %{_libexecdir}/openssh/ssh-sk-helper
 %{_libdir}/openssh/private/libcbor.so*
+%{_libdir}/openssh/private/libpcsclite.so*
 %{_libdir}/openssh/private/libfido2.so*
 %attr(0644,root,root) %{_mandir}/man8/ssh-pkcs11-helper.8*
 %attr(0644,root,root) %{_mandir}/man8/ssh-sk-helper.8*
