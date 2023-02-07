@@ -31,6 +31,7 @@ cd /tmp
 /sbin/ldconfig >/dev/null 2>&1
 
 _install_zlib () {
+    /sbin/ldconfig >/dev/null 2>&1
     set -e
     _tmp_dir="$(mktemp -d)"
     cd "${_tmp_dir}"
@@ -56,6 +57,7 @@ _install_zlib
 
 
 _install_libedit () {
+    /sbin/ldconfig >/dev/null 2>&1
     set -e
     _tmp_dir="$(mktemp -d)"
     cd "${_tmp_dir}"
@@ -90,6 +92,7 @@ _install_libedit () {
 _install_libedit
 
 _install_libcbor () {
+    /sbin/ldconfig >/dev/null 2>&1
     set -e
     _tmp_dir="$(mktemp -d)"
     cd "${_tmp_dir}"
@@ -126,6 +129,7 @@ _install_libcbor () {
 _install_libcbor
 
 _install_ssl111 () {
+    /sbin/ldconfig >/dev/null 2>&1
     LDFLAGS=''
     LDFLAGS="${_ORIG_LDFLAGS}"' -Wl,-rpath,\$$ORIGIN'
     export LDFLAGS
@@ -171,7 +175,50 @@ _install_ssl111 () {
 }
 _install_ssl111
 
+_install_pcsc_lite () {
+    /sbin/ldconfig >/dev/null 2>&1
+    set -e
+    _tmp_dir="$(mktemp -d)"
+    cd "${_tmp_dir}"
+    _pcsc_lite_ver="$(wget -qO- 'https://pcsclite.apdu.fr/files/' | sed 's|"|\n|g' | grep '^pcsc-lite-[0-9].*\.tar.*' | sed -e 's|pcsc-lite-||g' -e 's|\.tar.*||g' | sort -V | uniq | tail -n 1)"
+    wget -q -c -t 9 -T 9 "https://pcsclite.apdu.fr/files/pcsc-lite-${_pcsc_lite_ver}.tar.bz2"
+    sleep 1
+    tar -xof pcsc-lite-${_pcsc_lite_ver}.tar.*
+    sleep 1
+    rm -f pcsc-lite-*.tar*
+    cd pcsc-lite-*
+    # Convert to utf-8
+    for file in ChangeLog; do
+        iconv -f ISO-8859-1 -t UTF-8 -o $file.new $file && \
+        touch -r $file $file.new && \
+        mv $file.new $file
+    done
+    sleep 1
+    ./configure \
+    --build=x86_64-linux-gnu \
+    --host=x86_64-linux-gnu \
+    --prefix=/usr \
+    --libdir=/usr/lib64 \
+    --includedir=/usr/include \
+    --sysconfdir=/etc \
+    --disable-static \
+    --enable-polkit \
+    --with-systemdsystemunitdir=/usr/lib/systemd/system \
+    --enable-usbdropdir=/usr/lib64/pcsc/drivers
+    sleep 1
+    make all
+    rm -f /usr/lib64/libpcsclite.so*
+    sleep 1
+    make install
+    sleep 1
+    cd /tmp
+    rm -fr "${_tmp_dir}"
+    /sbin/ldconfig >/dev/null 2>&1
+}
+_install_pcsc_lite
+
 _install_fido2 () {
+    /sbin/ldconfig >/dev/null 2>&1
     LDFLAGS=''
     LDFLAGS="${_ORIG_LDFLAGS}"' -Wl,-rpath,\$ORIGIN'
     export LDFLAGS
