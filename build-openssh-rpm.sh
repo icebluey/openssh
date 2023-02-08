@@ -64,6 +64,8 @@ sleep 1
 ############################################################################
 cd /tmp
 rm -fr "${_tmp_dir}"
+rm -fr /usr/lib64/openssh/private
+
 rpmbuild -v -ba ~/rpmbuild/SOURCES/openssh.spec
 
 rm -fr /tmp/_output
